@@ -56,7 +56,7 @@ class MeterReading(Resource):
                 self.setReadingType(rt)
         for ib in intervalBlocks:
             if self.isParentOf(ib):
-                self.addIntervalBlock(r)
+                self.addIntervalBlock(ib)
 
     @property
     def intervalReadings(self):
