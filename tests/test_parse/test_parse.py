@@ -1,7 +1,12 @@
 """
-asdf
+These tests parse all available Green Button XML files into Python objects
+using the greenbutton_objects library. The parsed objects are then converted
+to string representations. Finally, the string representations are compared
+to saved expected outputs to verify parsing and representation generation
+are working correctly.
 """
 
+import itertools
 import os
 import pathlib
 from pathlib import Path
@@ -41,50 +46,62 @@ def save_expected_results(energy_source):
         )
 
 
-@pytest.mark.parametrize("data_file_name", os.listdir(_ROOT_DIR / "data" / "electricity"))
-def test_parse_electricity_feed(data_file_name):
+def check_file(data_file: Path):
     """
-    Verify that parsing an electricity XML file works as intended.
-
     Compares the string form of a parsed XML to a saved text file.
     """
-    data_path = _ROOT_DIR / "data" / "electricity"
-    expected_results_path = _ROOT_DIR / "expected_results" / "electricity"
+    atom_forest = parse.parse_feed(str(data_file))
+    parsed_feed_representation = parse.parse_feed_representation(atom_forest)
+    expected_result_file_name = (
+        data_file.parent.parent.parent
+        / "expected_results"
+        / data_file.parent.name
+        / data_file.with_suffix(".txt").name
+    )
+    with open(expected_result_file_name) as f:
+        expected_lines = map(str.strip, f)
+        result_lines = map(str.strip, parsed_feed_representation.splitlines())
 
-    parsed_feed = parse.parse_feed(data_path / data_file_name)
-    parsed_feed_representation = parse.parse_feed_representation(parsed_feed)
-    result_file_name = data_file_name.strip("xml") + "txt"
-    expected_results_file = expected_results_path / result_file_name
-    with open(expected_results_file) as f:
+        sentinel = object()
         for line_num, (expected_line, result_line) in enumerate(
-            zip(f, parsed_feed_representation.splitlines()), start=1
+            itertools.zip_longest(expected_lines, result_lines, fillvalue=sentinel), start=1
         ):
-            assert expected_line.strip("\n") == result_line.strip(
-                "\n"
-            ), f"Mismatch in file {data_file_name} at line {line_num}"
+            if expected_line == "":
+                continue
+            if result_line == "":
+                continue
+            if expected_line is sentinel:
+                assert False, f"Expected results ended before parsed results in file {data_file} {line_num}"
+            elif result_line is sentinel:
+                assert False, f"Parsed results ended before expected results in file {data_file} {line_num}"
+            else:
+                assert expected_line == result_line, f"Mismatch in file {data_file} at line {line_num}"
 
 
-@pytest.mark.parametrize("data_file_name", os.listdir(_ROOT_DIR / "data" / "natural_gas"))
+@pytest.mark.parametrize("data_file_name", map(str, (_ROOT_DIR / "data" / "electricity").iterdir()))
+def test_parse_electricity_feed(data_file_name):
+    """
+    Verify that parsing an electricity XML files works as intended.
+    """
+    check_file(Path(data_file_name))
+
+
+@pytest.mark.parametrize("data_file_name", map(str, (_ROOT_DIR / "data" / "natural_gas").iterdir()))
 def test_parse_natural_gas_feed(data_file_name):
     """
     Verify that parsing a natural gas XML file works as intended.
-
-    Compares the string form of a parsed XML to a saved text file.
     """
-    data_path = _ROOT_DIR / "data" / "natural_gas"
-    expected_results_path = _ROOT_DIR / "expected_results" / "natural_gas"
+    check_file(Path(data_file_name))
 
-    parsed_feed = parse.parse_feed(data_path / data_file_name)
-    parsed_feed_representation = parse.parse_feed_representation(parsed_feed)
-    result_file_name = data_file_name.strip("xml") + "txt"
-    expected_results_file = expected_results_path / result_file_name
-    with open(expected_results_file) as f:
-        for line_num, (expected_line, result_line) in enumerate(
-            zip(f, parsed_feed_representation.splitlines()), start=1
-        ):
-            assert expected_line.strip("\n") == result_line.strip(
-                "\n"
-            ), f"Mismatch in file {data_file_name} at line {line_num}"
+
+@pytest.mark.parametrize("energy_source", ["electricity", "natural_gas"])
+def test_quick(energy_source):
+    """
+    Very quick test that runs only one of of the files from each source
+    """
+    files = (_ROOT_DIR / "data" / energy_source).iterdir()
+    data_file_name = next(files)
+    check_file(data_file_name)
 
 
 if __name__ == "__main__":
