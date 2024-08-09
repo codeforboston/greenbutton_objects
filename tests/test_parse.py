@@ -14,6 +14,8 @@ from pathlib import Path
 import pytest
 from greenbutton_objects import parse
 
+from .helpers.feed_repr import parse_feed_representation
+
 _ROOT_DIR = pathlib.Path(__file__).parent
 
 
@@ -22,8 +24,8 @@ def _save_representation(test_xml_path: Path, test_output_path: Path) -> None:
     Parse an XML feed, generate a representation, and save it to a text
     file.
     """
-    parsed_feed = parse.parse_feed(test_xml_path)
-    representation = parse.parse_feed_representation(parsed_feed)
+    parsed_feed = parse.parse_feed(str(test_xml_path))
+    representation = parse_feed_representation(parsed_feed)
     with open(test_output_path, "w") as f:
         f.write(representation)
 
@@ -51,7 +53,7 @@ def check_file(data_file: Path):
     Compares the string form of a parsed XML to a saved text file.
     """
     atom_forest = parse.parse_feed(str(data_file))
-    parsed_feed_representation = parse.parse_feed_representation(atom_forest)
+    parsed_feed_representation = parse_feed_representation(atom_forest)
     expected_result_file_name = (
         data_file.parent.parent.parent
         / "expected_results"
@@ -95,15 +97,39 @@ def test_parse_natural_gas_feed(data_file_name):
 
 
 @pytest.mark.parametrize("energy_source", ["electricity", "natural_gas"])
-def test_quick(energy_source):
+def test_quick(data_dir, energy_source):
     """
-    Very quick test that runs only one of of the files from each source
+    Very quick test that runs only one of the files from each source
     """
-    files = (_ROOT_DIR / "data" / energy_source).iterdir()
+
+    files = (data_dir / energy_source).iterdir()
+    data_file_name = next(files)
+    check_file(data_file_name)
+    data_file_name = next(files)
+    check_file(data_file_name)
+
+
+@pytest.mark.parametrize(
+    "energy_source",
+    [
+        "abridged",
+    ],
+)
+def test_abridged(data_dir, energy_source):
+    """
+    Very quick test that runs only one of the files from each source
+    """
+
+    files = (data_dir / energy_source).iterdir()
+    data_file_name = next(files)
+    check_file(data_file_name)
+    data_file_name = next(files)
+    check_file(data_file_name)
     data_file_name = next(files)
     check_file(data_file_name)
 
 
 if __name__ == "__main__":
+    save_expected_results("abridged")
     save_expected_results("electricity")
     save_expected_results("natural_gas")
