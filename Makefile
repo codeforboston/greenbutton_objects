@@ -13,7 +13,7 @@ pydocstyle:
 lint: black isort pydocstyle
 
 mypy:
-	mypy .
+	mypy src
 
 gen_classes:
 	cd src && xsdata generate -c $(CONFIG) -p greenbutton_objects.data.espi https://www.naesb.org/espi.xsd

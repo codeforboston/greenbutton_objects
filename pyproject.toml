@@ -24,10 +24,10 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3"
 ]
-keywords = ["feed", "reader", "tutorial"]
 dependencies = [
   "xsdata"
 ]
+keywords = ["feed", "reader"]
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
