@@ -1,0 +1,6 @@
+UsagePoint (101 DOG ST BOBTOWN MA US 12345-9032) Service: GAS (-1) Meter Reading () Energy:
+    2024-07-16 18:26:24+00:00, 29 days, 0:00:00: 12 therm($28.06) [VALIDATED]
+
+    2024-07-16 18:26:24+00:00, 30 days, 0:00:00: 15 therm($33.06) [VALIDATED]
+
+    2024-07-16 18:26:24+00:00, 32 days, 0:00:00: 20 therm($41.28) [VALIDATED]
