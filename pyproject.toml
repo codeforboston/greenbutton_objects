@@ -25,6 +25,9 @@ classifiers = [
   "Programming Language :: Python :: 3"
 ]
 keywords = ["feed", "reader", "tutorial"]
+dependencies = [
+  "xsdata"
+]
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
@@ -37,6 +40,7 @@ dev = [
   "pytest==8.3.2",
   "pytest-cov==5.0.0",
   "pytest_sugar==1.0.0",
+  "xsdata[cli]==24.7",
   "ruff==0.5.5"
 ]
 
