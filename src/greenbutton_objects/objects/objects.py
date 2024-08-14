@@ -108,14 +108,14 @@ class MeterReading:
     title: str
     uri: str
     reading_type: espi.ReadingType
-    readings: Tuple[IntervalReading, ...] = field(default_factory=tuple)
+    interval_readings: Tuple[IntervalReading, ...] = field(default_factory=tuple)
     intervalBlock: Tuple[IntervalBlock, ...] = field(default_factory=tuple)
 
     __uom_symbol = None
     __uom_description = None
 
     def patch(self) -> None:
-        for r in self.readings:
+        for r in self.interval_readings:
             r.reading_type = self.reading_type
 
     @property

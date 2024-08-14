@@ -48,7 +48,7 @@ class ObjectFeed:
                     uri=mr_node.uri,
                     reading_type=reading_type if reading_type else espi.ReadingType(),
                     intervalBlock=tuple(interval_blocks),
-                    readings=tuple(combined_readings),
+                    interval_readings=tuple(combined_readings),
                 )
 
                 for ib in reading.intervalBlock:
