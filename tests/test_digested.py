@@ -37,16 +37,16 @@ def test_electric_containerized(data_dir):
     assert mr.title == "Hourly Electricity Consumption"
     assert "Point/1/MeterReading/0" in mr.uri
     assert len(mr.intervalBlock) == 2
-    assert len(mr.readings) == 8
+    assert len(mr.interval_readings) == 8
 
-    assert mr.readings[0].value == 450
-    assert isnan(mr.readings[0].cost)
-    assert mr.readings[0].quality_of_reading == QualityOfReading.MISSING
+    assert mr.interval_readings[0].value == 450
+    assert isnan(mr.interval_readings[0].cost)
+    assert mr.interval_readings[0].quality_of_reading == QualityOfReading.MISSING
 
     iblock = mr.intervalBlock[0]
     assert len(iblock.readings) == 4
 
-    assert mr.readings[0].parent == iblock
+    assert mr.interval_readings[0].parent == iblock
 
 
 def test_gas_containerized(data_dir):
@@ -76,17 +76,17 @@ def test_gas_containerized(data_dir):
     assert mr.title == ""
     assert "Point/01/MeterReading/01" in mr.uri
     assert len(mr.intervalBlock) == 3
-    assert len(mr.readings) == 3
+    assert len(mr.interval_readings) == 3
 
     # Not this is not normalized
-    assert mr.readings[0].value == 12.000
-    assert mr.readings[0].cost == 2806000
-    assert mr.readings[0].quality_of_reading == QualityOfReading.VALIDATED
+    assert mr.interval_readings[0].value == 12.000
+    assert mr.interval_readings[0].cost == 2806000
+    assert mr.interval_readings[0].quality_of_reading == QualityOfReading.VALIDATED
 
     iblock = mr.intervalBlock[0]
     assert len(iblock.readings) == 1
 
-    assert mr.readings[0].parent == iblock
+    assert mr.interval_readings[0].parent == iblock
 
 
 def test_gas_direct(data_dir):
@@ -112,17 +112,17 @@ def test_gas_direct(data_dir):
     assert mr.title == ""
     assert "Point/NET_USAGE/MeterReading/1" in mr.uri
     assert len(mr.intervalBlock) == 1
-    assert len(mr.readings) == 5
+    assert len(mr.interval_readings) == 5
 
     # Not this is not normalized
-    assert mr.readings[0].value == 37.000
-    assert mr.readings[0].cost == 5100000
-    assert mr.readings[0].quality_of_reading == QualityOfReading.MISSING
+    assert mr.interval_readings[0].value == 37.000
+    assert mr.interval_readings[0].cost == 5100000
+    assert mr.interval_readings[0].quality_of_reading == QualityOfReading.MISSING
 
     iblock = mr.intervalBlock[0]
     assert len(iblock.readings) == 5
 
-    assert mr.readings[0].parent == iblock
+    assert mr.interval_readings[0].parent == iblock
 
 
 def test_gas_direct_pb(data_dir):

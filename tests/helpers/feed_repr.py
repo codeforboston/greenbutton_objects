@@ -23,22 +23,22 @@ def parse_feed_representation(feed: ObjectFeed) -> str:
             result.append("Meter Reading (%s) %s:" % (mr.title, mr.uom_description))
             result.append("\n")
 
-            for reading in mr.readings:
+            for interval_reading in mr.interval_readings:
                 result.append(
                     "    %s, %s: %g%s"
                     % (
-                        reading.start.strftime("%Y-%m-%d %H:%M:%S+00:00"),
-                        str(timedelta(seconds=reading.time_period.duration)),  # type: ignore
-                        reading.value,
+                        interval_reading.start.strftime("%Y-%m-%d %H:%M:%S+00:00"),
+                        str(timedelta(seconds=interval_reading.time_period.duration)),  # type: ignore
+                        interval_reading.value,
                         mr.uom_symbol,
                     )
                 )
-                if not isnan(reading.cost):
-                    result.append("(%s%s)" % ("$", reading.cost / 100000))
+                if not isnan(interval_reading.cost):
+                    result.append("(%s%s)" % ("$", interval_reading.cost / 100000))
                     # TODO: Hard-coding $ for now as current code does
                     #  not handle currency correctly
-                if reading.quality_of_reading != ob.QualityOfReading.MISSING:
-                    result.append(" [%s]" % reading.quality_of_reading.name)
+                if interval_reading.quality_of_reading != ob.QualityOfReading.MISSING:
+                    result.append(" [%s]" % interval_reading.quality_of_reading.name)
                 result.append("\n\n")
 
     return "".join(result)

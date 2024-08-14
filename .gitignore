@@ -11,6 +11,9 @@ venv/
 # PyCharm
 .idea/
 
+# Mac
+.DS_Store
+
 # Distribution / packaging
 build/
 dist/
