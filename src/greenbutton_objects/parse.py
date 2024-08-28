@@ -10,6 +10,10 @@ from greenbutton_objects.atom.href_forest import HRefForest
 from greenbutton_objects.feed.feed import ObjectFeed
 
 
+def untested_function(filename: str) -> str:
+    return filename.capitalize()
+
+
 def parse_feed(filename: str) -> ObjectFeed:
     data = parse_xml(filename)
 
