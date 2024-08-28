@@ -32,4 +32,4 @@ def mypy(session) -> None:
 def tests(session) -> None:
     """Run the test suite."""
     session.install(".[dev]")
-    session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
+    session.run("coverage", "run", "--source=src", "--parallel", "-m", "pytest", *session.posargs)

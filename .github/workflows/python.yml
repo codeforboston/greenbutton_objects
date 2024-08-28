@@ -37,3 +37,20 @@ jobs:
         run: pip install '.[dev]'
       - name: Test with Nox
         run: nox -s mypy-3.12
+  coverage:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: pip
+      - name: Install Nox
+        run: pip install '.[dev]'
+      - name: Test with Nox
+        run: nox -s tests-3.12
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
