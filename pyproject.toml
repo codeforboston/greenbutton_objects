@@ -11,7 +11,7 @@ version = "2024.7.11"
 description = "Parse Green Button XML files into Python objects."
 readme = "README.md"
 authors = [
-  {name = "Phil Gold", email = "phil_g@pobox.com"},
+  {name = "Pip! Gold", email = "pip@aperiodic.net"},
   {name = "Adam Finkle", email = "77808710+AdamFinkle@users.noreply.github.com"},
   {name = "Ethan Strominger", email = "ethanstrominger2@gmail.com"}
 ]
